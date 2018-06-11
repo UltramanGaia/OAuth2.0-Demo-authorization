@@ -22,7 +22,7 @@ $mysqli_stmt->bind_param("s",$email);
 $mysqli_stmt->execute();
 $mysqli_stmt->store_result();
 if($mysqli_stmt->num_rows() === 0){
-    echoMessageAndRefresh("error email or password"."/login.php");
+    echoMessageAndRefresh("error email or password","/login.php");
     exit();
     //die("error email or password");
 }
@@ -34,13 +34,13 @@ if(md5($salt.$password) === $password_md5){
     $_SESSION['email'] = $email;
     // echo "login success";
     if(isset($_GET['next'])){
-        echoMessageAndRefresh("error email or password".urldecode($_GET['next']));
+        echoMessageAndRefresh("success",urldecode($_GET['next']));
     }else{
-        echoMessageAndRefresh("error email or password"."/profile");
+        echoMessageAndRefresh("success","/profile");
     }
 
 }else{
-    echoMessageAndRefresh("error email or password"."/login.php");
+    echoMessageAndRefresh("error email or password","/login.php");
 }
 
 

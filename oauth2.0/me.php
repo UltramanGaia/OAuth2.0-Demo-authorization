@@ -19,15 +19,14 @@ if(!isset($_POST['access_token'])){
 }
 $accessToken = $_POST['access_token'];
 
-$sql = "select userId from access where accessToken = ? and now()<createTime + 3600";
+$sql = "select userId from access where accessToken = ? and unix_timestamp()<createTime + 3600";
 $mysqli_stmt = $mysqli->prepare($sql);
 $mysqli_stmt->bind_param("s", $accessToken);
 $mysqli_stmt->execute();
-if($mysqli_stmt->num_rows()===0){
+$mysqli_stmt->bind_result($userId);
+if(!$mysqli_stmt->fetch()){
     die("error accessToken or accessToken out-of-date");
 }
-$mysqli_stmt->bind_result($userId);
-$mysqli_stmt->fetch();
 $mysqli_stmt->close();
 
 $sql = "select firstName, lastName from user where id = ? ";
@@ -41,8 +40,8 @@ $mysqli_stmt->close();
 $mysqli->close();
 
 echo "{
-\"firstname\":$firstName,
-\"lastname\":$lastName
+\"firstname\":\"$firstName\",
+\"lastname\":\"$lastName\"
 }";
 
 

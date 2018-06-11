@@ -17,7 +17,8 @@ $email = trim($_POST['email']);
 $password = trim($_POST['password']);
 
 if(empty($email)||empty($password)){
-    die("email and password can not be empty");
+    echoMessageAndRefresh("email and password can not be empty");
+    // die("email and password can not be empty");
 }
 
 $mysqli_stmt = $mysqli->prepare("select * from user where email=?");
@@ -30,7 +31,7 @@ if(!$res){
 $row = $mysqli_stmt->num_rows ;
 $mysqli_stmt->close();
 if($row != 0) { //email exists
-    echo "email exists";
+    echoMessageAndRefresh("email exists");
     exit;
 }else{
     $mysqli_stmt = $mysqli->prepare("insert into user(firstName, lastName, email, password, salt) values(?,?,?,?,?)");
@@ -40,10 +41,10 @@ if($row != 0) { //email exists
     $res = $mysqli_stmt->execute();
     $mysqli_stmt->store_result();
     if(!$res){
-        echo "insert into table error";
+        echoMessageAndRefresh("insert into table error");
         exit;
     } else{
-        echo "success";
+        echoMessageAndRefresh("success","/index.php");
     }
     $mysqli_stmt->close();
 }
